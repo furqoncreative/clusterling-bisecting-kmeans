@@ -157,7 +157,7 @@ def get_center(data_idx, data):
 
 if __name__ == "__main__":
     k = 4
-    url = 'https://raw.githubusercontent.com/furqoncreative/clusterling-bisecting-kmeans/master/data.csv'
+    url = 'https://raw.githubusercontent.com/furqoncreative/clusterling-bisecting-kmeans/master/data2.csv'
     dataset = pd.read_csv(url)
     dataset.fillna(value=0, axis=1, inplace=True)
     dataset.head(7)
