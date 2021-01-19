@@ -157,15 +157,15 @@ def get_center(data_idx, data):
 
 if __name__ == "__main__":
     k = 4
-    url = 'https://raw.githubusercontent.com/furqoncreative/data-mining-eclat/master/movie_metadata.csv'
+    url = 'https://raw.githubusercontent.com/furqoncreative/clusterling-bisecting-kmeans/master/data.csv'
     dataset = pd.read_csv(url)
     dataset.fillna(value=0, axis=1, inplace=True)
     dataset.head(7)
     df = pd.DataFrame(dataset)
-    cols = [22, 8]
-    df = df[df.columns[cols]]
-    df.dropna(subset=["budget"], inplace=True)
-    df.dropna(subset=["gross"], inplace=True)
+    # cols = [22, 8]
+    # df = df[df.columns[cols]]
+    # df.dropna(subset=["budget"], inplace=True)
+    # df.dropna(subset=["gross"], inplace=True)
     data = df.to_numpy()
 
     #######bisecting_kmeans
