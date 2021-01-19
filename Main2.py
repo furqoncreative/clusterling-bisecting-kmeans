@@ -2,7 +2,7 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.manifold import TSNE
-
+import pandas as pd
 
 def kmeans(k, data_idx, data, cls_res, center_idx, cluster_number):
     center_list = random.sample(data_idx, k)
@@ -157,17 +157,16 @@ def get_center(data_idx, data):
 
 if __name__ == "__main__":
     k = 4
-    with open('data.csv') as f:
-        data = []
-        while True:
-            rows = f.readline()
-            if not rows:
-                break
-            reList = rows.strip().split(',')
-            data.append(reList)
-            print(reList)
-        data = np.array([[float(x) for x in row] for row in data])
-
+    url = 'https://raw.githubusercontent.com/furqoncreative/data-mining-eclat/master/movie_metadata.csv'
+    dataset = pd.read_csv(url)
+    dataset.fillna(value=0, axis=1, inplace=True)
+    dataset.head(7)
+    df = pd.DataFrame(dataset)
+    cols = [22, 8]
+    df = df[df.columns[cols]]
+    df.dropna(subset=["budget"], inplace=True)
+    df.dropna(subset=["gross"], inplace=True)
+    data = df.to_numpy()
 
     #######bisecting_kmeans
     cls_res = bisecting(k, data)
