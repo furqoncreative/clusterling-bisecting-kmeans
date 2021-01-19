@@ -2,7 +2,7 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.manifold import TSNE
-
+import pandas as pd
 
 def kmeans(k, data_idx, data, cls_res, center_idx, cluster_number):
     center_list = random.sample(data_idx, k)
@@ -16,11 +16,10 @@ def kmeans(k, data_idx, data, cls_res, center_idx, cluster_number):
     while True:
         is_changed = 0
         cls_count = np.zeros(k, dtype=float)
-        cls_avg = np.zeros([k, 7])
+        cls_avg = np.zeros([k, 2])
         sse_idx1 = []
         sse_idx2 = []
         for i in data_idx:
-            # 计算点i到其他点的所有距离，并把点i分类到距离最近的聚类当中
             point = data[i]
             dist = (point - cls_center) ** 2
             dist = dist.sum(axis=1)
@@ -66,7 +65,7 @@ def get_SSE(data_idx, data, center):
 def bisecting(k, data):
     cls_center = []
     cls_SSE = np.zeros(k, dtype='float')
-    cls_start = np.zeros(7, dtype='float')
+    cls_start = np.zeros(2, dtype='float')
     cls_res = np.zeros(len(data), dtype='int')
     cls_count = np.zeros(k, dtype='int')
     for i in data:
@@ -77,7 +76,7 @@ def bisecting(k, data):
 
     while len(cls_center) < k:  # 重复操作，直到得到k个聚类为止
         cls_count = np.zeros(k, dtype=float)
-        cls_avg = np.zeros([k, 7])
+        cls_avg = np.zeros([k, 2])
 
         if len(cls_center) == 1:
             for i in range(0, len(cls_center)):
@@ -157,17 +156,15 @@ def get_center(data_idx, data):
 
 if __name__ == "__main__":
     k = 4
-    with open('data.csv') as f:
-        data = []
-        while True:
-            rows = f.readline()
-            if not rows:
-                break
-            reList = rows.strip().split(',')
-            data.append(reList)
-            print(reList)
-        data = np.array([[float(x) for x in row] for row in data])
-
+    url = 'https://raw.githubusercontent.com/furqoncreative/data-mining-eclat/master/movie_metadata.csv'
+    dataset = pd.read_csv(url)
+    dataset.fillna(value=0, axis=1, inplace=True)
+    df = pd.DataFrame(dataset)
+    cols = [22, 8]
+    df = df[df.columns[cols]]
+    df = df.loc[(df != 0.0).any(1)]
+    df = df[:1000]
+    data = df.to_numpy()
 
     #######bisecting_kmeans
     cls_res = bisecting(k, data)
@@ -191,7 +188,7 @@ if __name__ == "__main__":
                 xs.append(transformed[j][0])
                 ys.append(transformed[j][1])
                 result.append(j)
-        plt.title("bisecting_kmeans")
+        plt.title("Result")
         plt.scatter(xs, ys, c=[np.random.rand(3, )])
 
         collection_list.append(result)
